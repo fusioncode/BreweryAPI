@@ -67,8 +67,35 @@
 ## How to Test
 
 1. **API Fetch:**
-   - Call any controller endpoint that uses `BrewerySourceAPI` (e.g., `/brewery`).
-   - Verify data is returned from the external API.
+ ### 1. Get Breweries
+**`GET /Brewery`**
+
+Retrieve a list of breweries with optional sorting and search filters.
+
+#### Query Parameters
+| Name         | Type    | Default | Description |
+|--------------|---------|---------|-------------|
+| `sortBy`     | string  | city    | Field to sort results by (e.g., `city`, `name`). |
+| `descending` | boolean | false   | Whether to sort in descending order. |
+| `search`     | string  | -       | Search term to filter breweries. |
+
+
+### 2. Brewery Autocomplete
+**`GET /Brewery/autocomplete`**
+
+Fetch autocomplete suggestions for brewery names.
+
+#### Query Parameters
+| Name    | Type    | Default | Description |
+|---------|---------|---------|-------------|
+| `query` | string  | -       | Search term for autocomplete. |
+| `limit` | integer | 10      | Maximum number of suggestions to return. |
+
+#### Responses
+- **200 OK** – Returns a list of brewery suggestions. 
+
+#### Responses
+- **200 OK** – Returns a list of breweries.  
 
 2. **Caching:**
    - Repeat the same request within 10 minutes.
