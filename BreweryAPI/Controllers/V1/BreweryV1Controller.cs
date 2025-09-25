@@ -1,7 +1,3 @@
-/*
-// This controller is disabled to avoid conflicts with the v1 v2 BreweryController
-
-
 
 using BreweryAPI.Models.Service.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -12,19 +8,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BreweryAPI.Controllers
+namespace BreweryAPI.Controllers.V1
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [Route("[controller]")] // Backwards compatibility
+    [Route("api/v{version:apiVersion}/Brewery")]
     [Authorize]
-    public class BreweryController : ControllerBase
+    public class BreweryV1Controller : ControllerBase
     {
         private readonly IBreweryService breweryService;
-        private readonly ILogger<BreweryController> logger;
+        private readonly ILogger<BreweryV1Controller> logger;
 
-        public BreweryController(IBreweryService _breweryService, ILogger<BreweryController> _logger)
+        public BreweryV1Controller(IBreweryService _breweryService, ILogger<BreweryV1Controller> _logger)
         {
             breweryService = _breweryService;
             logger = _logger;
@@ -50,7 +45,7 @@ namespace BreweryAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error occurred in GetBrewery");
+                logger.LogError(ex, "Error occurred in GetBrewery V1");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -83,10 +78,10 @@ namespace BreweryAPI.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error occurred in Autocomplete");
+                logger.LogError(ex, "Error occurred in Autocomplete V1");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
     }
 }
-*/
+

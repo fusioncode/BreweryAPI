@@ -1,6 +1,3 @@
-/*
-// This controller is disabled to avoid conflicts with the v1 v2 AuthController
-
 
 using BreweryAPI.Models.DTOs;
 using BreweryAPI.Models.Service.Interface;
@@ -8,18 +5,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace BreweryAPI.Controllers
+namespace BreweryAPI.Controllers.V1
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [Route("api/[controller]")] // Backwards compatibility
-    public class AuthController : ControllerBase
+    [Route("api/v{version:apiVersion}/Auth")]
+    public class AuthV1Controller : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly ILogger<AuthController> _logger;
+        private readonly ILogger<AuthV1Controller> _logger;
 
-        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        public AuthV1Controller(IAuthService authService, ILogger<AuthV1Controller> logger)
         {
             _authService = authService;
             _logger = logger;
@@ -51,7 +47,7 @@ namespace BreweryAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred during login");
+                _logger.LogError(ex, "Error occurred during login V1");
                 return StatusCode(500, new { message = "An error occurred while processing your request" });
             }
         }
@@ -82,7 +78,7 @@ namespace BreweryAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred during registration");
+                _logger.LogError(ex, "Error occurred during registration V1");
                 return StatusCode(500, new { message = "An error occurred while processing your request" });
             }
         }
@@ -124,7 +120,7 @@ namespace BreweryAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while getting current user");
+                _logger.LogError(ex, "Error occurred while getting current user V1");
                 return StatusCode(500, new { message = "An error occurred while processing your request" });
             }
         }
@@ -143,7 +139,7 @@ namespace BreweryAPI.Controllers
 
             return Ok(new
             {
-                message = "Authentication successful!",
+                message = "Authentication successful! (API v1.0)",
                 user = new
                 {
                     username = username,
@@ -154,4 +150,4 @@ namespace BreweryAPI.Controllers
         }
     }
 }
-*/
+
