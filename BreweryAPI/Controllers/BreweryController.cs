@@ -1,4 +1,5 @@
-﻿using BreweryAPI.Models.Service.Interface;
+using BreweryAPI.Models.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,6 +11,7 @@ namespace BreweryAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class BreweryController : ControllerBase
     {
         private readonly IBreweryService breweryService;

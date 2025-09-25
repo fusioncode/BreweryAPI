@@ -1,64 +1,109 @@
-﻿using BreweryAPI.Models.Entities;
+using BreweryAPI.Models.Entities;
 using BreweryAPI.Models.Service.Interface;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BreweryAPI.Models.Service
 {
+    /// <summary>
+    /// Orchestrates brewery operations using SOLID principles.
+    /// Follows SRP - Single responsibility for orchestration.
+    /// Follows OCP - Open for extension, closed for modification.
+    /// Follows LSP - Uses abstractions that can be substituted.
+    /// Follows ISP - Depends only on interfaces it needs.
+    /// Follows DIP - Depends on abstractions, not concretions.
+    /// </summary>
     public class BreweryService : IBreweryService
     {
-        private readonly IBrewerySourceAPI sourceAPI;
-        private readonly ILogger<BreweryService> logger;
+        private readonly IBreweryFetcher _breweryFetcher;
+        private readonly ICacheProvider _cacheProvider;
+        private readonly IFallbackProvider _fallbackProvider;
+        private readonly IBrewerySearch _brewerySearch;
+        private readonly ILogger<BreweryService> _logger;
 
-        public BreweryService(IBrewerySourceAPI _sourceAPI, ILogger<BreweryService> _logger)
+        private const string CacheKey = "BreweryData";
+        private static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(10);
+
+        public BreweryService(
+            IBreweryFetcher breweryFetcher,
+            ICacheProvider cacheProvider,
+            IFallbackProvider fallbackProvider,
+            IBrewerySearch brewerySearch,
+            ILogger<BreweryService> logger)
         {
-            sourceAPI = _sourceAPI;
-            logger = _logger;
+            _breweryFetcher = breweryFetcher;
+            _cacheProvider = cacheProvider;
+            _fallbackProvider = fallbackProvider;
+            _brewerySearch = brewerySearch;
+            _logger = logger;
         }
 
         public async Task<object> GetBreweries(string sortBy = "city", bool descending = false, string search = null)
         {
             try
             {
-                var filter = "breweries";
-                var breweries = await sourceAPI.GetBrewery(filter);
+                _logger.LogInformation("Getting breweries with sortBy: {SortBy}, descending: {Descending}, search: {Search}", 
+                    sortBy, descending, search);
 
-                var breweryList = JsonConvert.DeserializeObject<List<BrewerySource>>(breweries);
+                // Step 1: Try to get data from cache first
+                var cachedBreweries = _cacheProvider.Get<List<BrewerySource>>(CacheKey);
+                List<BrewerySource> breweryData;
 
-                var result = breweryList
-                    .Select(b => new BreweryDataModels
-                    {
-                        name = b.name,
-                        city = b.city,
-                        phone = b.phone
-                    })
-                    .AsQueryable();
-
-                // Search logic
-                if (!string.IsNullOrWhiteSpace(search))
+                if (cachedBreweries != null && cachedBreweries.Any())
                 {
-                    var lowered = search.ToLower();
-                    result = result.Where(b =>
-                        (!string.IsNullOrEmpty(b.name) && b.name.ToLower().Contains(lowered)) ||
-                        (!string.IsNullOrEmpty(b.city) && b.city.ToLower().Contains(lowered))
-                    );
+                    _logger.LogDebug("Using cached brewery data ({Count} breweries)", cachedBreweries.Count);
+                    breweryData = cachedBreweries;
+                }
+                else
+                {
+                    // Step 2: Try to fetch from API
+                    try
+                    {
+                        _logger.LogDebug("Cache miss, fetching from API");
+                        breweryData = await _breweryFetcher.FetchBreweriesAsync("breweries");
+                        
+                        if (breweryData.Any())
+                        {
+                            // Cache the successful API response
+                            _cacheProvider.Set(CacheKey, breweryData, CacheExpiration);
+                            
+                            // Save to fallback storage for future use
+                            await _fallbackProvider.SaveFallbackDataAsync(breweryData);
+                            
+                            _logger.LogInformation("Successfully fetched and cached {Count} breweries from API", breweryData.Count);
+                        }
+                    }
+                    catch (Exception apiEx)
+                    {
+                        _logger.LogWarning(apiEx, "API fetch failed, attempting to use fallback data");
+                        
+                        // Step 3: Fallback to stored data if API fails
+                        breweryData = await _fallbackProvider.GetFallbackBreweriesAsync();
+                        
+                        if (breweryData.Any())
+                        {
+                            _logger.LogInformation("Using fallback data ({Count} breweries)", breweryData.Count);
+                        }
+                        else
+                        {
+                            _logger.LogError("No fallback data available and API fetch failed");
+                            throw new InvalidOperationException("Unable to retrieve brewery data from any source", apiEx);
+                        }
+                    }
                 }
 
-                // Sorting logic
-                result = sortBy.ToLower() switch
-                {
-                    "name" => descending ? result.OrderByDescending(b => b.name) : result.OrderBy(b => b.name),
-                    _ => descending ? result.OrderByDescending(b => b.city) : result.OrderBy(b => b.city)
-                };
+                // Step 4: Search and filter the data
+                var searchResults = _brewerySearch.SearchBreweries(breweryData, search);
+                
+                // Step 5: Sort the results
+                var sortedResults = _brewerySearch.SortBreweries(searchResults, sortBy, descending);
 
-                return result.ToList();
+                _logger.LogInformation("Returning {Count} breweries after search and sort operations", sortedResults.Count);
+                
+                return sortedResults;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                logger.LogError(ex, "Error occurred in GetBreweries");
+                _logger.LogError(ex, "Error occurred in GetBreweries");
                 throw; // Let the controller handle the response
             }
         }
