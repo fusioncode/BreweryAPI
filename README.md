@@ -118,6 +118,14 @@ Fetch autocomplete suggestions for brewery names.
 
 ## Notes
 
+This project now supports API versioning. All endpoints are versioned using the URL segment method.
+
+Available Versions
+
+v1 – initial release (in-memory cache, search, sort, autocomplete).
+
+v2 – same functionality as v1 but extended to support future changes without breaking existing clients.
+
 - The fallback file (`response.json`) should contain valid JSON data matching the expected API response.
 - For automated testing, mock dependencies (`IMemoryCache`, `IConfiguration`, `ILogger<BrewerySourceAPI>`) to simulate different scenarios.
 
