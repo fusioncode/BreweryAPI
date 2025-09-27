@@ -118,6 +118,9 @@ Fetch autocomplete suggestions for brewery names.
 
 ## Notes
 
+For Auth Login User ID : admin@brewery.com
+                   pwd : admin123
+
 This project now supports API versioning. All endpoints are versioned using the URL segment method.
 
 Available Versions
