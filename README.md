@@ -98,7 +98,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 🔄 Request Flows
+## Request Flows
 
 ### Brewery Search (V2)
 1. `POST /api/v2.0/Brewery/search` → `BrewerySearchV2RequestDto`.  
