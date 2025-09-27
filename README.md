@@ -8,7 +8,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ## Table of Contents
 1. [Overview](#-overview)  
-2. [Goals & Non-Goals](#-goals--non-goals)  
+2. [Goals](#-goals)  
 3. [Architecture & Components](#-architecture--components)  
    - [Web Layer](#web-layer)  
    - [Service Layer](#service-layer)  
@@ -36,7 +36,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## Goals & Non-Goals
+## Goals
 
 ### Goals
 - Deliver a **resilient, secure, and extensible backend** for brewery discovery.  
