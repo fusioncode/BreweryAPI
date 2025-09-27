@@ -45,11 +45,6 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 - Support **JWT authentication** & role-driven authorization.  
 - Provide **high observability, testing coverage, and deployment readiness**.  
 
-### ❌ Non-Goals
-- No public frontend UI (handled by consumers).  
-- No long-term brewery data persistence (only cache + fallback).  
-- No internal analytics dashboards (data exposed for external BI).  
-
 ---
 
 ##  Architecture & Components
