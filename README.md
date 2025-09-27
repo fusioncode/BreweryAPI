@@ -147,7 +147,6 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 ## Observability
 - **Logging:** Structured JSON logs.  
 - **Metrics:** Cache hits/misses, API latency, token usage.  
-- **Tracing:** OpenTelemetry for distributed tracing.  
 
 ---
 
