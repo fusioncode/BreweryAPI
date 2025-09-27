@@ -184,73 +184,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
   }
 }
 
-
-## How to Test
-
-1. **API Fetch:**
- ### 1. Get Breweries
-**`GET /Brewery`**
-
-Retrieve a list of breweries with optional sorting and search filters.
-
-#### Query Parameters
-| Name         | Type    | Default | Description |
-|--------------|---------|---------|-------------|
-| `sortBy`     | string  | city    | Field to sort results by (e.g., `city`, `name`). |
-| `descending` | boolean | false   | Whether to sort in descending order. |
-| `search`     | string  | -       | Search term to filter breweries. |
+Note : userid for login : admin@brewery.com
+                     pwd: admin123 
 
 
-### 2. Brewery Autocomplete
-**`GET /Brewery/autocomplete`**
-
-Fetch autocomplete suggestions for brewery names.
-
-#### Query Parameters
-| Name    | Type    | Default | Description |
-|---------|---------|---------|-------------|
-| `query` | string  | -       | Search term for autocomplete. |
-| `limit` | integer | 10      | Maximum number of suggestions to return. |
-
-#### Responses
-- **200 OK** – Returns a list of brewery suggestions. 
-
-#### Responses
-- **200 OK** – Returns a list of breweries.  
-
-2. **Caching:**
-   - Repeat the same request within 10 minutes.
-   - Confirm the response is served from cache (faster, no new API call).
-
-3. **API Failure Fallback:**
-   - Disconnect from the internet or set an invalid API URL in `appsettings.json`.
-   - Place a valid `response.json` file in the project root.
-   - Make a request; data should be served from the file.
-
-4. **File Fallback Failure:**
-   - Remove or rename `response.json`.
-   - With the API still unreachable, make a request.
-   - The response should be empty, and errors should be logged.
-
-5. **Logging:**
-   - Check application logs for messages about API errors, file fallback, and cache usage.
-
----
-
-## Notes
-
-For Auth Login User ID : admin@brewery.com
-                   pwd : admin123
-
-This project now supports API versioning. All endpoints are versioned using the URL segment method.
-
-Available Versions
-
-v1 – initial release (in-memory cache, search, sort, autocomplete).
-
-v2 – same functionality as v1 but extended to support future changes without breaking existing clients.
-
-- The fallback file (`response.json`) should contain valid JSON data matching the expected API response.
-- For automated testing, mock dependencies (`IMemoryCache`, `IConfiguration`, `ILogger<BrewerySourceAPI>`) to simulate different scenarios.
-
----
