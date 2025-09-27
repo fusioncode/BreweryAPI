@@ -1,4 +1,4 @@
-# BrewerySourceAPI By Sayan Paul 09/09/2025 for E.L.F Beauty
+# BrewerySourceAPI By Sayan Paul 
 
 ## Overview
 
