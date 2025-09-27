@@ -6,7 +6,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 1. [Overview](#-overview)  
 2. [Goals & Non-Goals](#-goals--non-goals)  
 3. [Architecture & Components](#-architecture--components)  
@@ -26,7 +26,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 🔎 Overview
+## Overview
 - **Framework:** ASP.NET Core Web API  
 - **Authentication:** JWT-based (Bearer tokens)  
 - **Data Source:** [Open Brewery DB](https://www.openbrewerydb.org/documentation)  
@@ -36,9 +36,9 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 🎯 Goals & Non-Goals
+## Goals & Non-Goals
 
-### ✅ Goals
+### Goals
 - Deliver a **resilient, secure, and extensible backend** for brewery discovery.  
 - Enable **advanced search** (filtering, pagination, geospatial distance).  
 - Maintain clear **separation of concerns** via interfaces (`IBreweryFetcher`, `ICacheProvider`, etc.).  
@@ -52,7 +52,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 🏗️ Architecture & Components
+##  Architecture & Components
 
 ### Web Layer
 - **Controllers**
@@ -90,7 +90,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 🗂️ Data Design
+## Data Design
 
 ### Entities
 - **User** → `Id, Username, Email, PasswordHash, Role, CreatedAt, LastLoginAt, IsActive`  
@@ -119,7 +119,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## ⚠️ Error Handling & Resilience
+## Error Handling & Resilience
 - **Logging:** Structured via `ILogger`.  
 - **Fallback:** Local file used when API unavailable.  
 - **Validation:** `[ApiController]` model validation.  
@@ -127,7 +127,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 🔐 Security Considerations
+## Security Considerations
 - **JWT Secret Management:** Use env vars or Key Vault (not plaintext).  
 - **Password Hashing:** Upgrade SHA256 → `PBKDF2`, `bcrypt`, or `argon2`.  
 - **Rate Limiting:** Consider ASP.NET middleware.  
@@ -135,7 +135,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 🚀 Performance & Scalability
+## Performance & Scalability
 - **Caching:** Reduce API calls (configurable TTL).  
 - **Pagination:** Controls payload size.  
 - **Async/await:** Non-blocking I/O.  
@@ -144,14 +144,14 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## 📊 Observability
+## Observability
 - **Logging:** Structured JSON logs.  
 - **Metrics:** Cache hits/misses, API latency, token usage.  
 - **Tracing:** OpenTelemetry for distributed tracing.  
 
 ---
 
-## 📘 Key Interfaces & Classes
+## Key Interfaces & Classes
 
 | Class / Interface | Responsibility |
 |-------------------|----------------|
@@ -164,7 +164,7 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
 
 ---
 
-## ⚙️ Configuration Example
+## Configuration Example
 ```json
 {
   "JwtSettings": {
@@ -184,7 +184,12 @@ The service follows **SOLID principles**, supports **API versioning (v1 & v2)**,
   }
 }
 
+---
+
+## Login Details
+
 Note : userid for login : admin@brewery.com
-                     pwd: admin123 
+                     pwd: admin123
+-----
 
 
